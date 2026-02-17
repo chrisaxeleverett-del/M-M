@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Wedding Story</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- 1. FONT REGISTRATION --- */
+        @font-face {
+            font-family: 'Bolinker';
+            src: url("FONTS/Bolinker Quantum Italic DEMO VERSION.ttf");
+        }
+
+        @font-face {
+            font-family: 'Fragmentcore';
+            src: url('FONTS/Fragmentcore.ttf');
+        }
+
+        :root {
+            --gold: #f7f1f1de;
+            --text-light: #ffffff;
+            --text-dark: #eca9a9;
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #E5BE7E;
+            overflow: hidden;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* --- 2. GLOBAL TYPOGRAPHY --- */
+        h1 { 
+            font-family: 'Bolinker';
+            font-weight: normal;
+        }
+
+        /* Long Vow Text Styles */
+        .vow-slide p {
+            font-family: 'Fragmentcore', serif;
+            font-size: 1.15rem;
+            line-height: 1.6;
+            text-align: justify;
+            hyphens: auto;
+            color: var(--text-light);
+            margin-top: 15px;
+            padding: 0 5px;
+        }
+
+        /* Mini Titles / Labels */
+        #game-page p, .folder-body p {
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        /* --- 3. SIDE-BY-SIDE IMAGE FIX --- */
+        .image-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        .image-row .vow-img {
+            width: 47%; /* Set to sit side-by-side */
+            max-height: 260px; /* Reduced height to ensure text fits on screen */
+            object-fit: contain;
+            border: 1px solid var(--gold);
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* --- 4. PETAL ANIMATION --- */
+        .petal {
+            position: absolute;
+            background-color: #e7cba9;
+            border-radius: 150% 0 150% 0;
+            opacity: 0.7;
+            pointer-events: none;
+            animation: fall linear infinite;
+            z-index: 100;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+            15% { opacity: 0.8; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* --- 5. SCREEN LAYOUT --- */
+        .screen {
+            display: none;
+            width: 90%;
+            max-width: 550px;
+            padding: 50px 35px;
+            border: 1px solid var(--gold);
+            border-radius: 4px;
+            text-align: center;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+            animation: luxuryFade 0.8s ease-out forwards;
+        }
+        .active { display: block; }
+
+        @keyframes luxuryFade {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        #game-page { background: linear-gradient(rgba(150, 114, 90, 0.85), rgba(197, 160, 89, 0.7)), url('IMAGES/bg.png'); color: #fff; }
+        #gateway-page { background: linear-gradient(rgba(235, 211, 143, 0), rgba(59, 59, 59, 0)), url('IMAGES/b1.jpg'); }
+        #folder-page { background: linear-gradient(rgba(253, 248, 240, 0), rgba(253, 248, 240, 0)), url('IMAGES/b2a.jpg'); }
+        #vows-page { background: linear-gradient(rgba(255, 245, 247, 0.1), rgba(0, 0, 0, 0.85)), url('vows-bg.jpg'); color: white; }
+
+        .corner { position: absolute; width: 30px; height: 30px; border: 1px solid var(--gold); }
+        .top-left { top: 15px; left: 15px; border-right: none; border-bottom: none; }
+        .top-right { top: 15px; right: 15px; border-left: none; border-bottom: none; }
+        
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 25px; }
+        .card { aspect-ratio: 1; background: var(--gold); cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; color: transparent; border-radius: 2px; }
+        .card.flipped { background: white; color: #333; transform: rotateY(180deg); }
+
+        .folder-container { display: flex; justify-content: space-around; margin-top: 40px; }
+        .folder-body { height: 100px; width: 130px; background: rgba(255,255,255,0.2); border: 1px solid var(--gold); backdrop-filter: blur(5px); border-radius: 0 10px 10px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
+
+        .slider-wrapper { 
+            position: relative; 
+            min-height: 480px; 
+            margin-top: 10px; 
+            overflow: hidden; 
+        }
+        .vow-slide { 
+            position: absolute; 
+            width: 100%; 
+            opacity: 0; 
+            transform: translateX(40px); 
+            transition: 0.7s; 
+            display: none; 
+            flex-direction: column;
+            align-items: center;
+        }
+        .vow-slide.active-slide { 
+            display: flex; 
+            opacity: 1; 
+            transform: translateX(0); 
+            position: relative; 
+        }
+
+        .gold-btn { background: var(--gold); color: white; border: none; padding: 12px 30px; text-transform: uppercase; letter-spacing: 3px; font-size: 0.8rem; cursor: pointer; margin-top: 25px; font-family: 'Montserrat'; }
+        .nav-btn { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 5px 15px; cursor: pointer; font-family: 'Montserrat'; }
+    </style>
+</head>
+<body>
+
+    <div id="game-page" class="screen active">
+        <div class="corner top-left"></div><div class="corner top-right"></div>
+        <h1>The Prelude</h1>
+        <p>MATCH THE PAIRS</p>
+        <div class="grid" id="grid"></div>
+    </div>
+
+    <div id="gateway-page" class="screen">
+        <h1>Celestial Union</h1>
+        <button class="gold-btn" onclick="showPage('folder-page')">Open Archives</button>
+    </div>
+
+    <div id="folder-page" class="screen">
+        <div class="corner top-left"></div><div class="corner top-right"></div>
+        <h1>Our Archives</h1>
+        <div class="folder-container">
+            <div class="folder" onclick="showPage('vows-page')">
+                <div class="folder-body"><span>📜</span><p>Our Vows</p></div>
+            </div>
+            <div class="folder" onclick="showPage('video-page')">
+                <div class="folder-body"><span>🎥</span><p>Our Film</p></div>
+            </div>
+        </div>
+        <button style="background:none; border:none; color:var(--gold); margin-top:30px; cursor:pointer;" onclick="location.reload()">RESET</button>
+    </div>
+
+    <div id="vows-page" class="screen">
+        <h1>The Greatest Story To Be Told ❤︎</h1>
+        <div class="slider-wrapper">
+            
+            <div class="vow-slide active-slide">
+                <div class="image-row">
+                    <img src="IMAGES/pa.png" class="vow-img">
+                    <img src="IMAGES/p1.png" class="vow-img"> </div>
+                <p>"Today, I’m marrying my best friend — which just proves that sometimes the greatest love stories don’t start with fate… they start with a login screen and a questionable amount of screen time in The Grand Mafia. We didn’t meet in the traditional way. There was no dramatic movie moment — just strategy, chaos, and the realization that somewhere between building empires and sending messages at ridiculous hours, I had found someone who just gets me. ・┆✦ʚ♡ɞ✦ ┆・"</p>
+            </div>
+
+            <div class="vow-slide">
+                <div class="image-row">
+                    <img src="IMAGES/pk.png" class="vow-img">
+                    <img src="IMAGES/pw.png" class="vow-img"> </div>
+                <p>".⊹₊˚‧︵‿₊୨ᰔThis may be a mock wedding, but the bond behind it is completely real. You’re the person I can celebrate with, vent to, cry with, laugh with, and trust — whether we’re plotting our next in-game move or just trying to survive whatever plot twist life throws at us. I vow to always have your back — in every raid, every bad day, and every moment when you just need someone in your corner. .ᰔ୧₊‿︵‧˚₊⊹"</p>
+            </div>
+
+            <div class="vow-slide">
+                <div class="image-row">
+                    <img src="IMAGES/pd.png" class="vow-img">
+                    <img src="IMAGES/pj.png" class="vow-img"> </div>
+                <p>"And I vow to keep choosing this friendship — this partnership — again and again, because life is simply more fun, more meaningful, and more us when we’re on the same team. You’re my favorite partner in crime, my trusted ally, and one of the greatest plot twists my life has ever given me. (˶˘ ³˘(⋆❛ ہ ❛⋆)♡"</p>
+            </div>
+
+            <div class="vow-slide">
+                <div class="image-row">
+                    <img src="IMAGES/ph.png" class="vow-img">
+                </div>
+                <p>"So whether we’re conquering virtual cities or just navigating the real world one quest at a time, I’m so grateful we found each other in this big, weird universe. Because in every timeline, on every server, and in every version of this story — I’d still pick you as my partner. I love you, Rhianon(mi amor).(◍•ᴗ•◍)♡ ✧*。 "</p>
+            </div>
+
+        </div>
+        <div style="display:flex; justify-content:center; gap:10px; margin-top: 10px;">
+            <button class="nav-btn" onclick="moveSlide(-1)">PREV</button>
+            <button class="nav-btn" onclick="moveSlide(1)">NEXT</button>
+        </div>
+        <button class="gold-btn" onclick="showPage('folder-page')">Back</button>
+    </div>
+<div id="video-page" class="screen">
+    <div class="corner top-left"></div><div class="corner top-right"></div>
+    <h1>Our Film</h1>
+    <div class="video-box">
+        <video width="100%" controls>
+            <source src="Vid/v1.mp4" type="video/mp4"> Your browser does not support the video tag.
+        </video>
+    </div>
+    <button class="gold-btn" onclick="showPage('folder-page')">Back</button>
+</div>
+    <script>
+        setInterval(() => {
+            const p = document.createElement('div');
+            p.className = 'petal';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.width = p.style.height = (Math.random() * 12 + 8) + 'px';
+            p.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 7000);
+        }, 500);
+
+        const emojis = ['💍','🥂','🕊️','🍰','🕯️','✨','🎻','🌹','💍','🥂','🕊️','🍰','🕯️','✨','🎻','🌹'];
+        let shuffled = emojis.sort(() => Math.random() - 0.5);
+        const grid = document.getElementById('grid');
+        let sel = [], matches = 0;
+        shuffled.forEach(e => {
+            const c = document.createElement('div'); c.className = 'card'; c.dataset.val = e; c.innerText = e;
+            c.onclick = function() { if (sel.length < 2 && !this.classList.contains('flipped')) { this.classList.add('flipped'); sel.push(this); if (sel.length === 2) setTimeout(check, 600); } };
+            grid.appendChild(c);
+        });
+        function check() { if (sel[0].dataset.val === sel[1].dataset.val) { matches += 2; if (matches === 16) showPage('gateway-page'); } else sel.forEach(x => x.classList.remove('flipped')); sel = []; }
+
+        let currentSlide = 0;
+        function showPage(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        function moveSlide(dir) { 
+            const slides = document.querySelectorAll('.vow-slide'); 
+            slides[currentSlide].classList.remove('active-slide'); 
+            currentSlide = (currentSlide + dir + slides.length) % slides.length; 
+            slides[currentSlide].classList.add('active-slide'); 
+        }
+    </script>
+</body>
+</html>
