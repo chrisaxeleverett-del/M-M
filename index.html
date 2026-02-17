@@ -8,7 +8,6 @@
     
     <style>
         /* --- 1. FONT REGISTRATION --- */
-        /* These assume the .ttf files are in the same folder as this HTML on GitHub */
         @font-face {
             font-family: 'Bolinker';
             src: url("Bolinker Quantum Italic DEMO VERSION.ttf");
@@ -31,8 +30,8 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #E5BE7E; /* Fallback color */
-            overflow: hidden;
+            background-color: #E5BE7E;
+            overflow: hidden; /* Keeps petals from causing body scroll */
             font-family: 'Montserrat', sans-serif;
         }
 
@@ -40,6 +39,7 @@
         h1 { 
             font-family: 'Bolinker', serif;
             font-weight: normal;
+            margin-top: 0;
         }
 
         .vow-slide p {
@@ -70,14 +70,14 @@
         }
 
         .image-row .vow-img {
-            width: 47%;
-            max-height: 240px;
+            width: 45%;
+            max-height: 180px; /* Reduced for mobile clearance */
             object-fit: contain;
             border: 1px solid var(--gold);
             background: rgba(255,255,255,0.05);
         }
 
-        /* --- 4. ANIMATIONS --- */
+        /* --- 4. ANIMATIONS & SCREENS --- */
         .petal {
             position: absolute;
             background-color: #e7cba9;
@@ -97,7 +97,9 @@
             display: none;
             width: 90%;
             max-width: 500px;
-            padding: 40px 30px;
+            max-height: 85vh; /* THE FIX: Keeps container within phone screen */
+            overflow-y: auto; /* THE FIX: Makes the content scrollable */
+            padding: 30px 20px;
             border: 1px solid var(--gold);
             border-radius: 4px;
             text-align: center;
@@ -106,6 +108,7 @@
             background-position: center;
             box-shadow: 0 30px 60px rgba(0,0,0,0.5);
             animation: luxuryFade 0.8s ease-out forwards;
+            box-sizing: border-box;
         }
         .active { display: block; }
 
@@ -114,30 +117,30 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* Background Paths - Updated for GitHub Flat Structure */
+        /* Backgrounds */
         #game-page { background: linear-gradient(rgba(150, 114, 90, 0.8), rgba(197, 160, 89, 0.6)), url('bg.png'); color: #fff; }
         #gateway-page { background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('b1.jpg'); }
         #folder-page { background: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url('b2a.jpg'); }
         #vows-page, #video-page { background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.8)), url('vows-bg.jpg'); color: white; }
 
         /* --- 5. COMPONENTS --- */
-        .corner { position: absolute; width: 25px; height: 25px; border: 1px solid var(--gold); }
-        .top-left { top: 15px; left: 15px; border-right: none; border-bottom: none; }
-        .top-right { top: 15px; right: 15px; border-left: none; border-bottom: none; }
+        .corner { position: absolute; width: 20px; height: 20px; border: 1px solid var(--gold); pointer-events: none; }
+        .top-left { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+        .top-right { top: 10px; right: 10px; border-left: none; border-bottom: none; }
         
-        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 20px; }
-        .card { aspect-ratio: 1; background: var(--gold); cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; color: transparent; border-radius: 2px; transition: 0.3s; }
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 15px; }
+        .card { aspect-ratio: 1; background: var(--gold); cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 1.1rem; color: transparent; border-radius: 2px; transition: 0.3s; }
         .card.flipped { background: white; color: #333; transform: rotateY(180deg); }
 
-        .folder-container { display: flex; justify-content: space-around; margin-top: 30px; }
-        .folder-body { height: 90px; width: 120px; background: rgba(255,255,255,0.2); border: 1px solid var(--gold); backdrop-filter: blur(5px); border-radius: 0 10px 10px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
+        .folder-container { display: flex; justify-content: space-around; margin-top: 20px; }
+        .folder-body { height: 80px; width: 110px; background: rgba(255,255,255,0.2); border: 1px solid var(--gold); backdrop-filter: blur(5px); border-radius: 0 10px 10px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
 
-        .slider-wrapper { position: relative; min-height: 420px; margin-top: 10px; overflow: hidden; }
-        .vow-slide { position: absolute; width: 100%; opacity: 0; transform: translateX(30px); transition: 0.6s; display: none; flex-direction: column; align-items: center; }
-        .vow-slide.active-slide { display: flex; opacity: 1; transform: translateX(0); position: relative; }
+        .slider-wrapper { position: relative; min-height: 250px; margin-top: 10px; }
+        .vow-slide { display: none; flex-direction: column; align-items: center; }
+        .vow-slide.active-slide { display: flex; }
 
-        .gold-btn { background: var(--gold); color: #444; border: none; padding: 10px 25px; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75rem; cursor: pointer; margin-top: 20px; font-family: 'Montserrat'; font-weight: bold; }
-        .nav-btn { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 4px 12px; cursor: pointer; font-size: 0.7rem; }
+        .gold-btn { background: var(--gold); color: #444; border: none; padding: 12px 25px; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75rem; cursor: pointer; margin-top: 15px; font-family: 'Montserrat'; font-weight: bold; }
+        .nav-btn { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 8px 15px; cursor: pointer; font-size: 0.75rem; font-family: 'Montserrat'; }
         
         .video-box { width: 100%; border: 1px solid var(--gold); margin-top: 15px; background: #000; }
     </style>
@@ -206,7 +209,8 @@ I love you, Rhianon(◍•ᴗ•◍)♡ ✧*。 "</p>
             </div>
 
         </div>
-        <div style="display:flex; justify-content:center; gap:10px; margin-top: 10px;">
+        
+        <div style="display:flex; justify-content:center; gap:10px; margin-top: 15px; margin-bottom: 10px;">
             <button class="nav-btn" onclick="moveSlide(-1)">PREV</button>
             <button class="nav-btn" onclick="moveSlide(1)">NEXT</button>
         </div>
@@ -272,11 +276,14 @@ I love you, Rhianon(◍•ᴗ•◍)♡ ✧*。 "</p>
         let currentSlide = 0;
         function showPage(id) { 
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); 
-            document.getElementById(id).classList.add('active'); 
+            const activePage = document.getElementById(id);
+            activePage.classList.add('active'); 
             
-            // Auto-pause video if leaving video page
+            // THE FIX: Reset scroll position to top when changing pages
+            activePage.scrollTop = 0;
+
             const vid = document.getElementById('weddingVideo');
-            if (id !== 'video-page') { vid.pause(); }
+            if (id !== 'video-page' && vid) { vid.pause(); }
         }
 
         function moveSlide(dir) { 
@@ -284,11 +291,9 @@ I love you, Rhianon(◍•ᴗ•◍)♡ ✧*。 "</p>
             slides[currentSlide].classList.remove('active-slide'); 
             currentSlide = (currentSlide + dir + slides.length) % slides.length; 
             slides[currentSlide].classList.add('active-slide'); 
+            // THE FIX: Scroll to top of the container when switching slides
+            document.getElementById('vows-page').scrollTop = 0;
         }
     </script>
 </body>
 </html>
-
-
-
-
